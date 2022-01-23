@@ -1,13 +1,13 @@
-export const success = (res, status) => (entity) => {
+export const success = (res, status = 200) => (entity) => {
   if (entity) {
-    res.status(status || 200).json(entity)
+    res.status(status).json(entity)
   }
   return null
 }
 
-export const badRequest = (res) => (error) => {
+export const error = (res, status = 500) => (error) => {
   if (error) {
-    res.status(400).json({ msg: error.message })
+    res.status(status).json({ msg: error.message })
   }
   return null
 }
@@ -27,7 +27,7 @@ export const ownerOrAdmin = (res, user, userField) => (entity) => {
     if (isOwner || isAdmin) {
       return entity
     }
-    res.status(401).end()
+    res.status(403).end()
   }
   return null
 }

@@ -1,4 +1,4 @@
-import { success, notFound, ownerOrAdmin, badRequest } from '../../services/response/'
+import { success, notFound, ownerOrAdmin, error } from '../../services/response/'
 import { Product } from '.'
 import { User } from '../user'
 
@@ -18,18 +18,11 @@ export const create = ({ user, body }, res, next) =>
         .then(success(res, 201))
         .catch((err) => {
           /* istanbul ignore else */
-          if (err.name === 'MongoError' && err.code === 11000) {
-            res.status(409).json({
-              valid: false,
-              param: 'name',
-              message: 'name already existed'
-            })
-          } else {
-            next(err)
-          }
+          if (err.name === 'MongoError' && err.code === 11000) error(res, 409)(new Error('name already existed'))
+          else next(err)
         })
     )
-    .catch(badRequest(res))
+    .catch(error(res, 400))
 
 export const index = ({ query: { page = 1, limit = 30, sort = '-createdAt' } }, res, next) =>
   Product.index(page, limit, sort)
@@ -55,15 +48,8 @@ export const update = ({ user, body, params }, res, next) =>
     .then(success(res))
     .catch((err) => {
       /* istanbul ignore else */
-      if (err.name === 'MongoError' && err.code === 11000) {
-        res.status(409).json({
-          valid: false,
-          param: 'name',
-          message: 'name already existed'
-        })
-      } else {
-        next(err)
-      }
+      if (err.name === 'MongoError' && err.code === 11000) error(res, 409)(new Error('name already existed'))
+      else next(err)
     })
 
 export const destroy = ({ user, params }, res, next) =>

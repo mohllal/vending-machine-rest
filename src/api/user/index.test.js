@@ -41,7 +41,7 @@ test('GET /users?page=2&limit=1 200 (admin)', async () => {
   expect(body.rows.length).toBe(1)
 })
 
-test('GET /users?page=2&limit=-1 400 (admin)', async () => {
+test('GET /users?page=2&limit=-1 400 (admin) - invalid limit', async () => {
   const { status, body } = await request(app())
     .get(apiRoot)
     .query({ access_token: adminSession, page: 2, limit: -1 })
@@ -49,7 +49,7 @@ test('GET /users?page=2&limit=-1 400 (admin)', async () => {
   expect(typeof body).toBe('object')
 })
 
-test('GET /users?page=-2&limit=1 400 (admin)', async () => {
+test('GET /users?page=-2&limit=1 400 (admin) - invalid page', async () => {
   const { status, body } = await request(app())
     .get(apiRoot)
     .query({ access_token: adminSession, page: -2, limit: 1 })
@@ -160,7 +160,6 @@ test('POST /users 409 - duplicated email', async () => {
     .send({ email: 'b@b.com', password: '123456', role: 'admin' })
   expect(status).toBe(409)
   expect(typeof body).toBe('object')
-  expect(body.param).toBe('email')
 })
 
 test('POST /users 400 - invalid email', async () => {
@@ -295,18 +294,18 @@ test('PUT /users/:id 400 (admin) - invalid password', async () => {
   expect(typeof body).toBe('object')
 })
 
-test('PUT /users/:id 401 (seller) - another user', async () => {
+test('PUT /users/:id 403 (seller) - another user', async () => {
   const { status } = await request(app())
     .put(`${apiRoot}/${buyer.id}`)
     .send({ access_token: sellerSession, name: 'test' })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
-test('PUT /users/:id 401 (buyer) - another user', async () => {
+test('PUT /users/:id 403 (buyer) - another user', async () => {
   const { status } = await request(app())
     .put(`${apiRoot}/${seller.id}`)
     .send({ access_token: buyerSession, name: 'test' })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
 test('PUT /users/:id 401', async () => {
@@ -316,7 +315,7 @@ test('PUT /users/:id 401', async () => {
   expect(status).toBe(401)
 })
 
-test('PUT /users/:id 404 (admin)', async () => {
+test('PUT /users/:id 404', async () => {
   const { status } = await request(app())
     .put(apiRoot + '/123456789098765432123456')
     .send({ access_token: adminSession, name: 'test' })
@@ -350,7 +349,7 @@ test('DELETE /users/:id 401', async () => {
   expect(status).toBe(401)
 })
 
-test('DELETE /users/:id 404 (admin)', async () => {
+test('DELETE /users/:id 404', async () => {
   const { status } = await request(app())
     .delete(apiRoot + '/123456789098765432123456')
     .send({ access_token: adminSession })

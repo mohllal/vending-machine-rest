@@ -83,6 +83,7 @@ router.get('/:id',
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 User not found.
  * @apiError 401 Current user or admin access only.
+ * @apiError 403 Forbidden access.
  */
 router.put('/:id',
   token({ required: true }),

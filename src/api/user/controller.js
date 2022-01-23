@@ -1,4 +1,4 @@
-import { success, notFound } from '../../services/response/'
+import { success, notFound, ownerOrAdmin, error } from '../../services/response/'
 import { User } from '.'
 import { sign } from '../../services/jwt'
 
@@ -26,33 +26,14 @@ export const create = ({ body }, res, next) =>
     })
     .catch((err) => {
       /* istanbul ignore else */
-      if (err.name === 'MongoError' && err.code === 11000) {
-        res.status(409).json({
-          valid: false,
-          param: 'email',
-          message: 'email already registered'
-        })
-      } else {
-        next(err)
-      }
+      if (err.name === 'MongoError' && err.code === 11000) error(res, 409)(new Error('email already existed'))
+      else next(err)
     })
 
 export const update = ({ body, params, user }, res, next) =>
   User.findById(params.id === 'me' ? user.id : params.id)
     .then(notFound(res))
-    .then((result) => {
-      if (!result) return null
-      const isAdmin = user.role === 'admin'
-      const isSelfUpdate = user.id === result.id
-      if (!isSelfUpdate && !isAdmin) {
-        res.status(401).json({
-          valid: false,
-          message: 'You can\'t change other user\'s data'
-        })
-        return null
-      }
-      return result
-    })
+    .then(ownerOrAdmin(res, user, '_id'))
     .then((user) => user ? Object.assign(user, body).save() : null)
     .then((user) => user ? user.view(true) : null)
     .then(success(res))

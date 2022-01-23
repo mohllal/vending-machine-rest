@@ -29,6 +29,25 @@ describe('success', () => {
   })
 })
 
+describe('error', () => {
+  it('responds with passed object and status 500', () => {
+    expect(response.error(res)(new Error('value'))).toBeNull()
+    expect(res.status).toBeCalledWith(500)
+    expect(res.json).toBeCalledWith({ msg: 'value' })
+  })
+
+  it('responds with passed object and status 400', () => {
+    expect(response.error(res, 400)(new Error('value'))).toBeNull()
+    expect(res.status).toBeCalledWith(400)
+    expect(res.json).toBeCalledWith({ msg: 'value' })
+  })
+
+  it('does not send any response when object has not been passed', () => {
+    expect(response.success(res, 400)()).toBeNull()
+    expect(res.status).not.toBeCalled()
+  })
+})
+
 describe('notFound', () => {
   it('responds with status 404 when object has not been passed', () => {
     expect(response.notFound(res)()).toBeNull()
@@ -70,10 +89,10 @@ describe('ownerOrAdmin', () => {
     expect(response.ownerOrAdmin(res, user, 'user')(entity)).toEqual(entity)
   })
 
-  it('responds with status 401 when owner is not the same or admin', () => {
+  it('responds with status 403 when owner is not the same or admin', () => {
     user.id = 2
     expect(response.ownerOrAdmin(res, user, 'owner')(entity)).toBeNull()
-    expect(res.status).toBeCalledWith(401)
+    expect(res.status).toBeCalledWith(403)
     expect(res.end).toHaveBeenCalledTimes(1)
   })
 

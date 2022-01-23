@@ -169,11 +169,11 @@ test('GET /products/:id 401 (buyer)', async () => {
   expect(status).toBe(401)
 })
 
-test('GET /products/:id 401 (seller) - another user', async () => {
+test('GET /products/:id 403 (seller) - another user', async () => {
   const { status } = await request(app())
     .delete(`${apiRoot}/${product.id}`)
     .send({ access_token: anotherSellerSession })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
 test('GET /products/:id 404', async () => {
@@ -264,11 +264,11 @@ test('PUT /products/:id 401 (buyer)', async () => {
   expect(status).toBe(401)
 })
 
-test('PUT /products/:id 401 (seller) - another user', async () => {
+test('PUT /products/:id 403 (seller) - another user', async () => {
   const { status } = await request(app())
     .put(`${apiRoot}/${product.id}`)
     .send({ access_token: anotherSellerSession, name: 'test', amount: 20, cost: 20 })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
 test('PUT /products/:id 404', async () => {
@@ -292,11 +292,11 @@ test('DELETE /products/:id 204 (admin)', async () => {
   expect(status).toBe(204)
 })
 
-test('DELETE /products/:id 401 (seller) - another user', async () => {
+test('DELETE /products/:id 403 (seller) - another user', async () => {
   const { status } = await request(app())
     .delete(`${apiRoot}/${product.id}`)
     .send({ access_token: anotherSellerSession })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
 test('DELETE /products/:id 401', async () => {
