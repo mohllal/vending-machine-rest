@@ -308,6 +308,7 @@ test('DELETE /products/:id 401', async () => {
 test('DELETE /products/:id 401 (buyer)', async () => {
   const { status } = await request(app())
     .delete(`${apiRoot}/${product.id}`)
+    .query({ access_token: buyerSession })
   expect(status).toBe(401)
 })
 
