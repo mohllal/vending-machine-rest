@@ -18,6 +18,6 @@ export default (apiRoot, routes) => {
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(bodyParser.json())
   app.use(apiRoot, routes)
-  app.use(async (error, req, res, next) => { res.status(500).json({ msg: error.message }) })
+  app.use((error, req, res, next) => res.status(500).json({ msg: error.message }))
   return app
 }

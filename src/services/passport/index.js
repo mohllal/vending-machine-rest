@@ -13,6 +13,7 @@ export const password = () => (req, res, next) =>
       return res.status(401).end()
     }
     req.logIn(user, { session: false }, (err) => {
+      /* istanbul ignore next */
       if (err) return res.status(401).end()
       next()
     })
@@ -20,10 +21,14 @@ export const password = () => (req, res, next) =>
 
 export const token = ({ required, roles = User.roles } = {}) => (req, res, next) =>
   passport.authenticate('token', { session: false }, (err, user, info) => {
-    if (err || (required && !user) || (required && !~roles.indexOf(user.role))) {
+    if (err || (required && !user)) {
       return res.status(401).end()
     }
+    if (required && !~roles.indexOf(user.role)) {
+      return res.status(403).end()
+    }
     req.logIn(user, { session: false }, (err) => {
+      /* istanbul ignore next */
       if (err) return res.status(401).end()
       next()
     })

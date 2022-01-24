@@ -23,11 +23,7 @@ const orderSchema = new Schema({
     min: 1
   }
 }, {
-  timestamps: true,
-  toJSON: {
-    virtuals: true,
-    transform: (obj, ret) => { delete ret._id }
-  }
+  timestamps: true
 })
 
 orderSchema.methods = {

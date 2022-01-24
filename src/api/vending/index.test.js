@@ -14,7 +14,7 @@ beforeEach(async () => {
   buyer = await User.create({ email: 'b@b.com', password: '123456', role: 'buyer', deposit: 10 })
   admin = await User.create({ email: 'a@a.com', password: '123456', role: 'admin' })
   seller = await User.create({ email: 's@s.com', password: '123456', role: 'seller' })
-  product = await Product.create({ name: 'product', cost: 5, amount: 10, sellerId: seller })
+  product = await Product.create({ name: 'product', cost: 5, amount: 20, sellerId: seller })
   adminSession = signSync(admin.id)
   sellerSession = signSync(seller.id)
   buyerSession = signSync(buyer.id)
@@ -84,18 +84,18 @@ test('POST /vending/buy 401', async () => {
   expect(status).toBe(401)
 })
 
-test('POST /vending/buy 401 (admin)', async () => {
+test('POST /vending/buy 403 (admin)', async () => {
   const { status } = await request(app())
     .post(`${apiRoot}/buy`)
     .send({ access_token: adminSession })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
-test('POST /vending/buy 401 (seller)', async () => {
+test('POST /vending/buy 403 (seller)', async () => {
   const { status } = await request(app())
     .post(`${apiRoot}/buy`)
     .send({ access_token: sellerSession })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
 test('POST /vending/deposit 200 (buyer)', async () => {
@@ -121,18 +121,18 @@ test('POST /vending/deposit 401', async () => {
   expect(status).toBe(401)
 })
 
-test('POST /vending/deposit 401 (seller)', async () => {
+test('POST /vending/deposit 403 (seller)', async () => {
   const { status } = await request(app())
     .post(`${apiRoot}/deposit`)
     .send({ access_token: sellerSession })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
-test('POST /vending/deposit 401 (admin)', async () => {
+test('POST /vending/deposit 403 (admin)', async () => {
   const { status } = await request(app())
     .post(`${apiRoot}/deposit`)
     .send({ access_token: adminSession })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
 test('POST /vending/reset (buyer)', async () => {
@@ -148,16 +148,16 @@ test('POST /vending/reset 401', async () => {
   expect(status).toBe(401)
 })
 
-test('POST /vending/reset 401 (seller)', async () => {
+test('POST /vending/reset 403 (seller)', async () => {
   const { status } = await request(app())
     .post(`${apiRoot}/reset`)
     .send({ access_token: sellerSession })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
-test('POST /vending/reset 401 (admin)', async () => {
+test('POST /vending/reset 403 (admin)', async () => {
   const { status } = await request(app())
     .post(`${apiRoot}/reset`)
     .send({ access_token: adminSession })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })

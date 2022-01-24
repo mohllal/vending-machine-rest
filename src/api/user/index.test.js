@@ -57,18 +57,18 @@ test('GET /users?page=-2&limit=1 400 (admin) - invalid page', async () => {
   expect(typeof body).toBe('object')
 })
 
-test('GET /users 401 (buyer)', async () => {
+test('GET /users 403 (buyer)', async () => {
   const { status } = await request(app())
     .get(apiRoot)
     .query({ access_token: buyerSession })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
-test('GET /users 401 (seller)', async () => {
+test('GET /users 403 (seller)', async () => {
   const { status } = await request(app())
     .get(apiRoot)
     .query({ access_token: sellerSession })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
 test('GET /users 401', async () => {
@@ -122,18 +122,18 @@ test('GET /users/:id 200 (admin)', async () => {
   expect(body.name).toBe(seller.name)
 })
 
-test('GET /users/:id 401 (seller)', async () => {
+test('GET /users/:id 403 (seller)', async () => {
   const { status } = await request(app())
     .get(`${apiRoot}/${seller.id}`)
     .query({ access_token: sellerSession })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
-test('GET /users/:id 401 (buyer)', async () => {
+test('GET /users/:id 403 (buyer)', async () => {
   const { status } = await request(app())
     .get(`${apiRoot}/${buyer.id}`)
     .query({ access_token: buyerSession })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
 test('GET /users/:id 404', async () => {
@@ -329,18 +329,18 @@ test('DELETE /users/:id 204 (admin)', async () => {
   expect(status).toBe(204)
 })
 
-test('DELETE /users/:id 401 (buyer)', async () => {
+test('DELETE /users/:id 403 (buyer)', async () => {
   const { status } = await request(app())
     .delete(`${apiRoot}/${buyer.id}`)
     .send({ access_token: buyerSession })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
-test('DELETE /users/:id 401 (seller)', async () => {
+test('DELETE /users/:id 403 (seller)', async () => {
   const { status } = await request(app())
     .delete(`${apiRoot}/${seller.id}`)
     .send({ access_token: sellerSession })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
 test('DELETE /users/:id 401', async () => {

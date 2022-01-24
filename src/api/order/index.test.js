@@ -55,18 +55,18 @@ test('GET /orders 401', async () => {
   expect(status).toBe(401)
 })
 
-test('GET /orders 401 (buyer)', async () => {
+test('GET /orders 403 (buyer)', async () => {
   const { status } = await request(app())
     .get(`${apiRoot}`)
     .query({ access_token: buyerSession })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
-test('GET /orders 401 (seller)', async () => {
+test('GET /orders 403 (seller)', async () => {
   const { status } = await request(app())
     .get(`${apiRoot}`)
     .query({ access_token: sellerSession })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
 test('GET /orders/:id 200 (buyer)', async () => {
@@ -101,11 +101,11 @@ test('GET /orders/:id 401', async () => {
   expect(status).toBe(401)
 })
 
-test('GET /orders/:id 401 (seller)', async () => {
+test('GET /orders/:id 403 (seller)', async () => {
   const { status } = await request(app())
     .get(`${apiRoot}/${order.id}`)
     .query({ access_token: sellerSession })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
 test('GET /orders/:id 403 (buyer) - another user', async () => {

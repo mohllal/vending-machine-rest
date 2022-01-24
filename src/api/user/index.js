@@ -34,6 +34,7 @@ router.post('/',
  * @apiSuccess {Number} count Total number of users.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 401 Admin access only.
+ * @apiError 403 Forbidden access.
  */
 router.get('/',
   token({ required: true, roles: ['admin'] }),
@@ -49,6 +50,7 @@ router.get('/',
  * @apiSuccess {Object} user User's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 401 Current user access only.
+ * @apiError 403 Forbidden access.
  */
 router.get('/me',
   token({ required: true }),
@@ -65,6 +67,7 @@ router.get('/me',
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 User not found.
  * @apiError 401 Admin access only.
+ * @apiError 403 Forbidden access.
  */
 router.get('/:id',
   token({ required: true, roles: ['admin'] }),
@@ -100,6 +103,7 @@ router.put('/:id',
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 User not found.
  * @apiError 401 Admin access only.
+ * @apiError 403 Forbidden access.
  */
 router.delete('/:id',
   token({ required: true, roles: ['admin'] }),

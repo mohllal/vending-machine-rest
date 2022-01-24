@@ -64,6 +64,30 @@ test('POST /products 400 (seller) - invalid cost', async () => {
   expect(typeof body).toBe('object')
 })
 
+test('POST /products 400 (seller) - missing amount', async () => {
+  const { status, body } = await request(app())
+    .post(`${apiRoot}`)
+    .send({ access_token: sellerSession, name: 'test', cost: 10 })
+  expect(status).toBe(400)
+  expect(typeof body).toBe('object')
+})
+
+test('POST /products 400 (seller) - missing cost', async () => {
+  const { status, body } = await request(app())
+    .post(`${apiRoot}`)
+    .send({ access_token: sellerSession, name: 'test', amount: 10 })
+  expect(status).toBe(400)
+  expect(typeof body).toBe('object')
+})
+
+test('POST /products 400 (seller) - missing name', async () => {
+  const { status, body } = await request(app())
+    .post(`${apiRoot}`)
+    .send({ access_token: sellerSession, amount: 10, cost: 10 })
+  expect(status).toBe(400)
+  expect(typeof body).toBe('object')
+})
+
 test('POST /products 400 (admin) - invalid amount', async () => {
   const { status, body } = await request(app())
     .post(`${apiRoot}`)
@@ -83,7 +107,31 @@ test('POST /products 400 (admin) - invalid cost', async () => {
 test('POST /products 400 (admin) - missing seller id', async () => {
   const { status, body } = await request(app())
     .post(`${apiRoot}`)
-    .send({ access_token: adminSession, name: 'test', amount: 10, cost: -10 })
+    .send({ access_token: adminSession, name: 'test', amount: 10, cost: 10 })
+  expect(status).toBe(400)
+  expect(typeof body).toBe('object')
+})
+
+test('POST /products 400 (admin) - missing amount', async () => {
+  const { status, body } = await request(app())
+    .post(`${apiRoot}`)
+    .send({ access_token: adminSession, sellerId: seller.id, name: 'test', cost: 10 })
+  expect(status).toBe(400)
+  expect(typeof body).toBe('object')
+})
+
+test('POST /products 400 (admin) - missing cost', async () => {
+  const { status, body } = await request(app())
+    .post(`${apiRoot}`)
+    .send({ access_token: adminSession, sellerId: seller.id, name: 'test', amount: 10 })
+  expect(status).toBe(400)
+  expect(typeof body).toBe('object')
+})
+
+test('POST /products 400 (admin) - missing name', async () => {
+  const { status, body } = await request(app())
+    .post(`${apiRoot}`)
+    .send({ access_token: adminSession, sellerId: seller.id, amount: 10, cost: 10 })
   expect(status).toBe(400)
   expect(typeof body).toBe('object')
 })
@@ -102,11 +150,11 @@ test('POST /products 401', async () => {
   expect(status).toBe(401)
 })
 
-test('POST /products 401 (buyer)', async () => {
+test('POST /products 403 (buyer)', async () => {
   const { status } = await request(app())
     .post(`${apiRoot}`)
     .send({ access_token: buyerSession })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
 test('GET /products 200', async () => {
@@ -243,6 +291,14 @@ test('PUT /products/:id 400 (admin) - invalid cost', async () => {
   expect(typeof body).toBe('object')
 })
 
+test('PUT /products/:id 400 (admin) - missing amount and cost', async () => {
+  const { status, body } = await request(app())
+    .put(`${apiRoot}/${product.id}`)
+    .send({ access_token: adminSession })
+  expect(status).toBe(400)
+  expect(typeof body).toBe('object')
+})
+
 test('PUT /products/:id 409 - duplicated name', async () => {
   const { status, body } = await request(app())
     .put(`${apiRoot}/${anotherProduct.id}`)
@@ -257,11 +313,11 @@ test('PUT /products/:id 401', async () => {
   expect(status).toBe(401)
 })
 
-test('PUT /products/:id 401 (buyer)', async () => {
+test('PUT /products/:id 403 (buyer)', async () => {
   const { status } = await request(app())
     .put(`${apiRoot}/${product.id}`)
     .send({ access_token: buyerSession, name: 'test', amount: 20, cost: 20 })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
 test('PUT /products/:id 403 (seller) - another user', async () => {
@@ -305,11 +361,11 @@ test('DELETE /products/:id 401', async () => {
   expect(status).toBe(401)
 })
 
-test('DELETE /products/:id 401 (buyer)', async () => {
+test('DELETE /products/:id 403 (buyer)', async () => {
   const { status } = await request(app())
     .delete(`${apiRoot}/${product.id}`)
     .query({ access_token: buyerSession })
-  expect(status).toBe(401)
+  expect(status).toBe(403)
 })
 
 test('DELETE /products/:id 404', async () => {
