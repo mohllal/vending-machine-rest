@@ -3,6 +3,7 @@ import user from './user'
 import auth from './auth'
 import product from './product'
 import order from './order'
+import vending from './vending'
 
 const router = new Router()
 
@@ -36,5 +37,6 @@ router.use('/users', user)
 router.use('/auth', auth)
 router.use('/products', product)
 router.use('/orders', order)
+router.use('/vending', vending)
 
 export default router
