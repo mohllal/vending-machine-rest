@@ -11,7 +11,7 @@ const router = new Router()
  * @apiName RetrieveOrders
  * @apiGroup Order
  * @apiPermission admin
- * @apiParam {String} access_token user access token.
+ * @apiParam {String} access_token User access token.
  * @apiUse listParams
  * @apiSuccess {Number} count Total amount of orders.
  * @apiSuccess {Object[]} rows List of orders.
@@ -31,7 +31,7 @@ router.get('/',
  * @apiGroup Order
  * @apiPermission admin
  * @apiPermission buyer
- * @apiParam {String} access_token user access token.
+ * @apiParam {String} access_token User access token.
  * @apiSuccess {Object} order Order's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Order not found.

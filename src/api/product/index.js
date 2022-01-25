@@ -12,7 +12,7 @@ const router = new Router()
  * @apiGroup Product
  * @apiPermission admin
  * @apiPermission seller
- * @apiParam {String} access_token user access token.
+ * @apiParam {String} access_token User access token.
  * @apiParam {Number{1..}} amount Product's amount.
  * @apiParam {Number{1..}} cost Product's cost.
  * @apiParam {String} name Product's name.
@@ -32,7 +32,7 @@ router.post('/',
  * @api {get} /products Retrieve products
  * @apiName RetrieveProducts
  * @apiGroup Product
- * @apiParam {String} access_token user access token.
+ * @apiParam {String} access_token User access token.
  * @apiUse listParams
  * @apiSuccess {Number} count Total amount of products.
  * @apiSuccess {Object[]} rows List of products.
@@ -49,7 +49,7 @@ router.get('/',
  * @apiGroup Product
  * @apiPermission admin
  * @apiPermission seller
- * @apiParam {String} access_token user access token.
+ * @apiParam {String} access_token User access token.
  * @apiSuccess {Object} product Product's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Product not found.
@@ -67,7 +67,7 @@ router.get('/:id',
  * @apiGroup Product
  * @apiPermission admin
  * @apiPermission seller
- * @apiParam {String} access_token user access token.
+ * @apiParam {String} access_token User access token.
  * @apiParam {Number{1..}} amount Product's amount.
  * @apiParam {Number{1..}} cost Product's cost.
  * @apiParam {String} name Product's name.

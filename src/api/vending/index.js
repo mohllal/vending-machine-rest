@@ -10,7 +10,9 @@ const router = new Router()
  * @apiName BuyProduct
  * @apiGroup Vending
  * @apiPermission buyer
- * @apiParam {String} access_token user access token.
+ * @apiParam {String} access_token User access token.
+ * @apiParam {String} productId Product's id.
+ * @apiParam {Number{1..}} amount Purchase amount.
  * @apiSuccess (Success 201) {Object} order Order's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 401 Buyer access only.
@@ -26,7 +28,8 @@ router.post('/buy',
  * @apiName DepositCoins
  * @apiGroup Vending
  * @apiPermission buyer
- * @apiParam {String} access_token user access token.
+ * @apiParam {String} access_token User access token.
+ * @apiParam {Number=5,10,20,50,100} amount Deposit amount.
  * @apiSuccess {Number} coins User's total coins.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 401 Buyer access only.
@@ -42,7 +45,7 @@ router.post('/deposit',
  * @apiName ResetCoins
  * @apiGroup Vending
  * @apiPermission buyer
- * @apiParam {String} access_token user access token.
+ * @apiParam {String} access_token User access token.
  * @apiSuccess (Success 204) 204 No Content.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 401 Buyer access only.
