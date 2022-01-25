@@ -8,7 +8,11 @@ const app = express(apiRoot, api)
 const server = http.createServer(app)
 
 if (mongo.uri) {
-  mongoose.connect(mongo.uri)
+  mongoose.connect(mongo.uri, {
+    connectTimeoutMS: 10000,
+    socketTimeoutMS: 10000,
+    serverSelectionTimeoutMS: 10000
+  })
 }
 mongoose.Promise = Promise
 

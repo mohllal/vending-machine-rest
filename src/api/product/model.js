@@ -68,6 +68,7 @@ productSchema.statics = {
 }
 
 const model = mongoose.model('Product', productSchema)
+model.ensureIndexes()
 
 export const schema = model.schema
 export default model

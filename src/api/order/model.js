@@ -64,6 +64,7 @@ orderSchema.statics = {
 }
 
 const model = mongoose.model('Order', orderSchema)
+model.ensureIndexes()
 
 export const schema = model.schema
 export default model

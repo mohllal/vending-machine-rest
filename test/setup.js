@@ -20,8 +20,17 @@ global.Error = Error
 global.TypeError = TypeError
 global.parseInt = parseInt
 global.parseFloat = parseFloat
+global.console = {
+  warn: jest.fn,
+  info: jest.fn,
+  log: console.log,
+  error: console.error,
+  debug: console.debug
+}
 
 let mongoServer
+
+jest.setTimeout(30000)
 
 beforeAll(async () => {
   mongoServer = await MongoMemoryReplSet.create({ replSet: { count: 1 } })

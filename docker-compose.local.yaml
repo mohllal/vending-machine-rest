@@ -1,0 +1,31 @@
+version: '3.5'
+services:
+  mongo:
+    image: "mongo:4.4"
+    container_name: mongo
+    restart: always
+    logging:
+      driver: none
+    command:
+      - "/usr/bin/mongod"
+      - "--bind_ip_all"
+      - "--replSet"
+      - "rs0"
+    healthcheck:
+      test: test $$(echo "rs.initiate({_id:'rs0',members:[{_id:0,host:\"mongo\"}]}).ok || rs.status().ok" | mongo --quiet) -eq 1
+      interval: 10s
+      start_period: 30s
+  app:
+    build: .
+    ports:
+     - "9000:9000"
+    environment:
+      NODE_ENV: compose
+      PORT: 9000
+      JWT_SECRET: secret
+      MONGO_URI: mongodb://mongo/vending-machine?replicaSet=rs0
+    command:
+     - "npm"
+     - "start"
+    depends_on:
+      - mongo

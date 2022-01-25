@@ -32,7 +32,7 @@ export const buy = async ({ user, body: { productId, amount } }, res, next) => {
 export const deposit = ({ user, body: { amount } }, res, next) =>
   User.findById(user.id)
     .then(notFound(res))
-    .then((user) => user ? Object.assign(user, { deposit: user.deposit + amount }).save() : null)
+    .then((user) => user ? Object.assign(user, { deposit: user.deposit ? user.deposit + amount : amount }).save() : null)
     .then((user) => user ? { coins: user.deposit } : null)
     .then(success(res))
     .catch(next)

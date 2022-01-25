@@ -11,7 +11,7 @@ const requireProcessEnv = (name) => {
 }
 
 /* istanbul ignore next */
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'compose') {
   const dotenv = require('dotenv-safe')
   dotenv.config({
     path: path.join(__dirname, '../.env'),
@@ -39,7 +39,15 @@ const config = {
   test: { },
   development: {
     mongo: {
-      uri: 'mongodb://localhost/vending-machine-dev',
+      uri: requireProcessEnv('MONGO_URI'),
+      options: {
+        debug: true
+      }
+    }
+  },
+  compose: {
+    mongo: {
+      uri: requireProcessEnv('MONGO_URI'),
       options: {
         debug: true
       }
@@ -49,7 +57,7 @@ const config = {
     ip: process.env.IP || undefined,
     port: process.env.PORT || 8080,
     mongo: {
-      uri: process.env.MONGODB_URI || 'mongodb://localhost/vending-machine'
+      uri: requireProcessEnv('MONGO_URI')
     }
   }
 }
